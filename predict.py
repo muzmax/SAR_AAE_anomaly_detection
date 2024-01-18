@@ -14,7 +14,7 @@ if __name__ == "__main__":
     params['device'] = 'cuda'
     params['save_dir'] = './data/res_pred_test'
     params['weights_dir'] = './pipeline/out/L_rx_0.04'
-    params['norm'] = np.array([[-1,-1,-1,-1],[10.5,10.5,10.5,10.5]]) # matrix of size (2,c) c being the number of channels
+    params['norm'] = np.array([[-1,-1,-1,-1],[1,1,1,1]]) # matrix of size (2,c) c being the number of channels
     params['channels'] = 4 # 1 for SLC and 4 for full pol
     params['pat_size'] = 32
     params['stride'] = 16
