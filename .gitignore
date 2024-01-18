@@ -1,6 +1,5 @@
 .DS_Store
 .huskyrc.json
-out
 log.log
 **/node_modules
 *.pyc
