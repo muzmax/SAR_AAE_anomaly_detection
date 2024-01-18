@@ -1,4 +1,3 @@
-from cv2 import norm
 from pipeline.datasets.preprocessing import denormalization
 import time
 from typing import Iterable
@@ -14,14 +13,9 @@ from ..scheduler.base import SchedulerBase
 from ..metrics.base import MetricsCalculatorBase
 
 from ..utils import move_to_device, save_model, load_model, save_im,tresh_im
-
-
 import os
 
-# save_tresh = [4.585E-8,1.651E-8,6.102E-8] # set variable to None for automatic tresholding
-# save_tresh = [0.21,0.10,0.21]
-# save_tresh = [0.21,0.10,0.21] # 2 channels
-save_tresh = [800,500,800]
+save_tresh = None
 
 track_loss = True
 debug = False # display grad norm
@@ -51,7 +45,8 @@ class TrainerAAE:
             state_storage: StateStorageBase,
             loss_lr_storage: StateStorageBase,
             norm,
-            metrics_calculator: MetricsCalculatorBase ) -> None:
+            metrics_calculator: MetricsCalculatorBase,
+            im_save_path: str ) -> None:
 
         self.encoder = encoder.to(device)
         self.decoder = decoder.to(device)
@@ -77,6 +72,7 @@ class TrainerAAE:
         self.model_save_path = model_save_path
         self.state_storage = state_storage
         self.loss_lr_storage = loss_lr_storage
+        self.im_save_path = im_save_path
 
         self.device = device
         
@@ -213,8 +209,8 @@ class TrainerAAE:
         result_denorm = denorm(result_np)
 
         
-        save_im(result_denorm,'./data/sample/reconstruction_{}_epoch_{}.png'.format(name[0],epoch_id),tresh=save_tresh)
-        np.save('./data/sample/reconstruction_{}_epoch_{}.npy'.format(name[0],epoch_id),result_denorm)
+        save_im(result_denorm,'{}/reconstruction_{}_epoch_{}.png'.format(self.im_save_path,name[0],epoch_id),tresh=save_tresh)
+        np.save('{}/reconstruction_{}_epoch_{}.npy'.format(self.im_save_path,name[0],epoch_id),result_denorm)
 
         
         norm_L1_01 = np.abs(input_np-result_np)

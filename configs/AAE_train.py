@@ -36,9 +36,11 @@ class Config_AAE(ConfigMultiNN):
         loss_lr_storage = StateStorageFile(os.path.join(params['weights_dir'], "loss_lr"))
         trainer = TrainerAAE
 
-
+        os.makedirs(params['save_dir'],exist_ok=True)
+        
         # Adding variables
         # ==================================================
+        self.save_path = params['save_dir']
         self.norm = params['norm']
 
         self.encoder = ConvEncoder(im_ch=params['channels'],
@@ -69,16 +71,16 @@ class Config_AAE(ConfigMultiNN):
         # s_dec = torch.optim.lr_scheduler.CyclicLR(self.opt_dec, base_lr=0.001, max_lr=0.01,step_size_up=2558,cycle_momentum=False)
         # s_gen = torch.optim.lr_scheduler.CyclicLR(self.opt_gen, base_lr=0.001, max_lr=0.01,step_size_up=2558,cycle_momentum=False)
         # s_disc = torch.optim.lr_scheduler.CyclicLR(self.opt_disc, base_lr=0.001, max_lr=0.01,step_size_up=2558,cycle_momentum=False)
-        s_enc = torch.optim.lr_scheduler.CyclicLR(self.opt_enc, base_lr=0.001, max_lr=0.01,step_size_up=862,cycle_momentum=False)
-        s_dec = torch.optim.lr_scheduler.CyclicLR(self.opt_dec, base_lr=0.001, max_lr=0.01,step_size_up=862,cycle_momentum=False)
-        s_gen = torch.optim.lr_scheduler.CyclicLR(self.opt_gen, base_lr=0.001, max_lr=0.01,step_size_up=862,cycle_momentum=False)
-        s_disc = torch.optim.lr_scheduler.CyclicLR(self.opt_disc, base_lr=0.001, max_lr=0.01,step_size_up=862,cycle_momentum=False)
+        s_enc = torch.optim.lr_scheduler.CyclicLR(self.opt_enc, base_lr=0.001, max_lr=0.01,step_size_up=params['step_up_scheduler'],cycle_momentum=False)
+        s_dec = torch.optim.lr_scheduler.CyclicLR(self.opt_dec, base_lr=0.001, max_lr=0.01,step_size_up=params['step_up_scheduler'],cycle_momentum=False)
+        s_gen = torch.optim.lr_scheduler.CyclicLR(self.opt_gen, base_lr=0.001, max_lr=0.01,step_size_up=params['step_up_scheduler'],cycle_momentum=False)
+        s_disc = torch.optim.lr_scheduler.CyclicLR(self.opt_disc, base_lr=0.001, max_lr=0.01,step_size_up=params['step_up_scheduler'],cycle_momentum=False)
     
         scheduler = Scheduler_AE(s_enc,s_dec,s_gen,s_disc) 
 
         # scheduler = None
 
-        super().__init__(model_save_path=params['save_dir'],
+        super().__init__(model_save_path=params['weights_dir'],
                          train_dataset=train_patches,
                          trainer=trainer,
                          device=params['device'],

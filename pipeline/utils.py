@@ -49,7 +49,8 @@ def run_train_AAE(config):
                                 state_storage=config.state_storage,
                                 loss_lr_storage = config.loss_lr_storage,
                                 norm = config.norm,
-                                metrics_calculator = config.metrics_calculator)
+                                metrics_calculator = config.metrics_calculator,
+                                im_save_path = config.save_path)
     trainer.run()
     
 # Make predictions with an adversarial autoencoder in a config
@@ -81,25 +82,6 @@ def run_predict_AAE(config):
                                     patch_size = config.patch_size,
                                     stride = config.stride)
     predictor.run()
-
-# Make predictions with an adversarial autoencoder in a config
-def run_gen_AAE(config):
-
-    model_save_path = config.model_save_path
-    assert os.path.exists(model_save_path), "{} does not exist".format(model_save_path)
-    os.makedirs(config.save_im_path, exist_ok=True)
-    logger_path = os.path.join(model_save_path, "log_gen.txt")
-    setup_logger(out_file=logger_path)
-
-    generator = config.generator(decoder=config.decoder,
-                                    discriminator = config.discriminator,
-                                    device=config.device,
-                                    model_save_path=model_save_path,
-                                    norm = config.norm,
-                                    save_im_path = config.save_im_path,
-                                    pred_nb = config.pred_nb
-                                    )
-    generator.run()
 
 # =====================================================================================
 

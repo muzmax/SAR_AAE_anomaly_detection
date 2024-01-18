@@ -15,8 +15,7 @@ from ..metrics.base import MetricsCalculatorBase
 
 import os
 
-save_tresh = [800,500,800]
-# save_tresh = [0.21,0.21,0.21] # 2 channels
+save_tresh = None
 save_ROC = True
 
 class PredictorAE:
@@ -109,14 +108,7 @@ class PredictorAE:
                 if key in ['L1','Euclidean','mix']:
                     ano = maps[key]
                     np.save('{}/{}_{}.npy'.format(self.save_im_path,name[0],key),ano)
-                    save_plot(normalize01(ano),'{}/{}_{}.png'.format(self.save_im_path,name[0],key),bar=True)
-                    save_plot(normalize01(np.clip(ano,None,np.mean(ano)+3*np.std(ano))),'{}/{}_{}_tresh.png'.format(self.save_im_path,name[0],key),bar=True)
-                    log_ano_200 = np.clip(20*np.log(normalize01(ano)+10**(-20)),-200,None)
-                    log_ano_100 = np.clip(20*np.log(normalize01(ano)+10**(-20)),-100,None)
-                    save_plot(log_ano_200,'{}/{}_{}_200_ano_score_dB.png'.format(self.save_im_path,name[0],key),bar=True)
-                    save_plot(log_ano_100,'{}/{}_{}_100_ano_score_dB.png'.format(self.save_im_path,name[0],key),bar=True)
-           
-
+                    save_plot(normalize01(np.clip(ano,None,np.mean(ano)+3*np.std(ano))),'{}/{}_{}_thresh.png'.format(self.save_im_path,name[0],key))
         label_np = label.cpu().data.numpy()
         ano = maps['Euclidean']
         self.metrics_calculator.add(ano,label_np)

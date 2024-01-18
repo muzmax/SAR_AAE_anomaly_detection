@@ -1,5 +1,5 @@
 import os
-from configs.pred_config_base import PredictConfigBaseAE, GenConfigBaseAE
+from configs.pred_config_base import PredictConfigBaseAE
 
 from pipeline.datasets.datasets import test_data
 from pipeline.datasets.load import load_eval_data
@@ -9,9 +9,8 @@ from pipeline.metrics.auroc import MetricsCalculatorAuroc
 
 from torchvision import transforms
 
-from pipeline.models.AAE import ConvEncoder,ConvDecoder, Discriminator
+from pipeline.models.AAE import ConvEncoder,ConvDecoder
 from pipeline.predictor.predictor_AE import PredictorAE
-from pipeline.predictor.generator_AE import GeneratorAE
 
 from pipeline.loss.score import detection_scores
 
@@ -54,22 +53,4 @@ class Config_pred_AAE(PredictConfigBaseAE):
                          )
 
 
-class Config_gen_AAE(GenConfigBaseAE):
-    def __init__(self,params):
-        decoder = ConvDecoder(im_ch=params['channels'],
-                              nz=params['z_size'],
-                              patch_size=params['pat_size'])
-        discriminator = Discriminator(nz=params['z_size'])
-        generator = GeneratorAE
-        super().__init__(model_save_path = params['weights_dir'],
-                         decoder = decoder,
-                         generator = generator,
-                         discriminator = discriminator,
-                         norm = params['norm'],
-                         save_im_path = params['save_dir'],
-                         device=params['device'],
-                         num_workers=0,
-                         pred_nb = params['pred_nb'])
-            
-                
         

@@ -64,31 +64,4 @@ class PredictConfigBaseAE:
         self.save_im_path = save_im_path
         self.metrics_calculator = metrics_calculator
 
-class GenConfigBaseAE:
-    def __init__(
-            self,
-            model_save_path,
-            decoder,
-            discriminator,
-            generator,
-            norm,
-            save_im_path = './data/results',
-            device=None,
-            num_workers=0,
-            pred_nb=10):
-        
-        if device is None:
-            device = "cuda" if torch.cuda.is_available() else "cpu"
-
-        self.norm = norm
-        self.decoder = decoder
-        self.discriminator = discriminator
-        self.model_save_path = model_save_path
-        self.num_workers = num_workers
-        self.generator = generator
-        self.device = device
-        self.save_im_path = save_im_path
-        self.pred_nb = pred_nb
-
-
         

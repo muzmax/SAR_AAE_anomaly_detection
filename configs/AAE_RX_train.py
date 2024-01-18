@@ -37,10 +37,12 @@ class Config_AAE_RX(ConfigMultiNN):
         loss_lr_storage = StateStorageFile(os.path.join(params['weights_dir'], "loss_lr"))
         trainer = TrainerAAE_RX
 
+        os.makedirs(params['save_dir'],exist_ok=True)
 
         # Adding variables
         # ==================================================
         self.norm = params['norm'] 
+        self.save_path = params['save_dir']
 
         self.encoder = ConvEncoder(im_ch=params['channels'],
                                    nz=params['z_size'],
@@ -72,10 +74,10 @@ class Config_AAE_RX(ConfigMultiNN):
         # s_dec = torch.optim.lr_scheduler.CyclicLR(self.opt_dec, base_lr=0.001, max_lr=0.01,step_size_up=2558,cycle_momentum=False)
         # s_gen = torch.optim.lr_scheduler.CyclicLR(self.opt_gen, base_lr=0.001, max_lr=0.01,step_size_up=2558,cycle_momentum=False)
         # s_disc = torch.optim.lr_scheduler.CyclicLR(self.opt_disc, base_lr=0.001, max_lr=0.01,step_size_up=2558,cycle_momentum=False)
-        s_enc = torch.optim.lr_scheduler.CyclicLR(self.opt_enc, base_lr=0.001, max_lr=0.01,step_size_up=862,cycle_momentum=False)
-        s_dec = torch.optim.lr_scheduler.CyclicLR(self.opt_dec, base_lr=0.001, max_lr=0.01,step_size_up=862,cycle_momentum=False)
-        s_gen = torch.optim.lr_scheduler.CyclicLR(self.opt_gen, base_lr=0.001, max_lr=0.01,step_size_up=862,cycle_momentum=False)
-        s_disc = torch.optim.lr_scheduler.CyclicLR(self.opt_disc, base_lr=0.001, max_lr=0.01,step_size_up=862,cycle_momentum=False)
+        s_enc = torch.optim.lr_scheduler.CyclicLR(self.opt_enc, base_lr=0.001, max_lr=0.01,step_size_up=params['step_up_scheduler'],cycle_momentum=False)
+        s_dec = torch.optim.lr_scheduler.CyclicLR(self.opt_dec, base_lr=0.001, max_lr=0.01,step_size_up=params['step_up_scheduler'],cycle_momentum=False)
+        s_gen = torch.optim.lr_scheduler.CyclicLR(self.opt_gen, base_lr=0.001, max_lr=0.01,step_size_up=params['step_up_scheduler'],cycle_momentum=False)
+        s_disc = torch.optim.lr_scheduler.CyclicLR(self.opt_disc, base_lr=0.001, max_lr=0.01,step_size_up=params['step_up_scheduler'],cycle_momentum=False)
         
         scheduler = Scheduler_AE(s_enc,s_dec,s_gen,s_disc) 
         # scheduler = None

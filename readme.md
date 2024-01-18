@@ -1,4 +1,4 @@
-Prediction/Generation
+Prediction
 > - python predict.py
 
 Training
