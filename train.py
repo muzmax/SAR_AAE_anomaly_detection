@@ -15,9 +15,9 @@ if __name__ == "__main__":
     params['RX'] = True # use the standard AAE or the modified version with RX filter
     params['device'] = 'cuda'
     params['save_dir'] = './data/res_train_test' # save evaluation images
-    params['eval_dir'] = '/media/max/TOSHIBA EXT/ONERA_SONDRA/data/under/Gretsi 2k23/eval_patches/denoised'
-    params['train_dir'] = '/media/max/TOSHIBA EXT/ONERA_SONDRA/data/under/Gretsi 2k23/4_pol_denoised'
-    params['weights_dir'] = './pipeline/out/test'
+    params['eval_dir'] = './data/eval'
+    params['train_dir'] = './data/train'
+    params['weights_dir'] = './pipeline/out/L'
     params['norm'] = np.array([[-1,-1,-1,-1],[1,1,1,1]]) # matrix of size (2,c) c being the number of channels
     params['channels'] = 4 # 1 ofr SLC and 4 for full pol
     params['pat_size'] = 32
@@ -33,7 +33,7 @@ if __name__ == "__main__":
         it consist in images that have a dynamic between 0 (normal) and 1 (abnormal)
         anomaly maps should have the exact same name as the original image (to be sorted in the same order)"""
     if params['RX']:
-        params['train_RX_dir'] = '/media/max/TOSHIBA EXT/ONERA_SONDRA/data/under/Gretsi 2k23/rx_score'
+        params['train_RX_dir'] = './train_rx'
         params['bin_RX'] = True
         params['bin_method'] = 'median' # method to replace the abnormal pixel. 'median', 'delete' and 'mean' are suported
         params['tresh_RX'] = 0.04
